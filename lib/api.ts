@@ -219,6 +219,12 @@ export async function call<T>(method: string, parameters: Record<string, any> = 
     params: parameters, 
   };
 
+  // If USE_MOCK_ONLY is enabled, skip API call entirely
+  if (DEV_CONFIG.USE_MOCK_ONLY) {
+    console.debug("Using mock data only (API call skipped):", { method, parameters });
+    return getMockData(method, parameters);
+  }
+
   try {
     
     console.debug("API Request:", { method, parameters });

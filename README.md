@@ -38,6 +38,43 @@ A modern social network where usernames represent net worth, built with Next.js,
 
 The app integrates with the TwoCents JSON-RPC 2.0 API at `https://api.twocents.money`. The implementation includes:
 
+### Switching to Real Data
+
+The app is currently configured to use mock data for demonstration purposes. When the TwoCents API is properly configured and available, you can easily switch to real data:
+
+1. **Open the configuration file**:
+   ```bash
+   # Edit lib/config.ts
+   ```
+
+2. **Change the setting**:
+   ```typescript
+   export const DEV_CONFIG = {
+     LOG_API_CALLS: true,
+     ENABLE_MOCK_FALLBACK: true,
+     USE_MOCK_ONLY: false,  // ← Change this to false
+     MOCK_DELAY: 100
+   };
+   ```
+
+3. **Redeploy the app**:
+   ```bash
+   git add .
+   git commit -m "Enable real API data"
+   git push
+   ```
+
+**What happens when you switch:**
+- ✅ App will fetch real data from the TwoCents API
+- ✅ Automatic fallback to mock data if API fails
+- ✅ No code changes needed - just configuration
+- ✅ Seamless transition to production data
+
+**Current Configuration:**
+- `USE_MOCK_ONLY: true` - Uses mock data instantly (no API calls)
+- `ENABLE_MOCK_FALLBACK: true` - Falls back to mock if API fails
+- `MOCK_DELAY: 100ms` - Fast loading with mock data
+
 ### Optimized API Client
 - **Unique Request IDs**: Uses `crypto.randomUUID()` for each request
 - **Proper CORS Headers**: Includes Origin header for cross-origin requests

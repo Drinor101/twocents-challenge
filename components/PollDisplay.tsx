@@ -21,14 +21,23 @@ export default function PollDisplay({
   totalVotes, 
   className 
 }: PollDisplayProps) {
-  const [animated, setAnimated] = useState(false);
+  const [animatedOptions, setAnimatedOptions] = useState<number[]>([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setAnimated(true);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, []);
+    // Stagger the animations for each option
+    const timers: NodeJS.Timeout[] = [];
+    
+    options.forEach((_, index) => {
+      const timer = setTimeout(() => {
+        setAnimatedOptions(prev => [...prev, index]);
+      }, 200 + (index * 150)); // 200ms delay + 150ms between each bar
+      timers.push(timer);
+    });
+
+    return () => {
+      timers.forEach(timer => clearTimeout(timer));
+    };
+  }, [options.length]);
 
   const getPercentage = (votes: number) => {
     if (totalVotes === 0) return 0;
@@ -37,14 +46,14 @@ export default function PollDisplay({
 
   const getBarColor = (index: number) => {
     const colors = [
-      'bg-blue-500',
-      'bg-green-500',
-      'bg-purple-500',
-      'bg-orange-500',
-      'bg-red-500',
-      'bg-indigo-500',
-      'bg-pink-500',
-      'bg-teal-500'
+      'bg-gradient-to-r from-blue-500 to-blue-600',
+      'bg-gradient-to-r from-green-500 to-green-600',
+      'bg-gradient-to-r from-purple-500 to-purple-600',
+      'bg-gradient-to-r from-orange-500 to-orange-600',
+      'bg-gradient-to-r from-red-500 to-red-600',
+      'bg-gradient-to-r from-indigo-500 to-indigo-600',
+      'bg-gradient-to-r from-pink-500 to-pink-600',
+      'bg-gradient-to-r from-teal-500 to-teal-600'
     ];
     return colors[index % colors.length];
   };
@@ -58,26 +67,34 @@ export default function PollDisplay({
       <div className="space-y-3">
         {options.map((option, index) => {
           const percentage = getPercentage(option.votes);
+          const isAnimated = animatedOptions.includes(index);
           
           return (
             <div key={index} className="space-y-1">
               <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-700 dark:text-gray-300">
+                <span className="text-gray-700 dark:text-gray-300 transition-opacity duration-300"
+                      style={{ opacity: isAnimated ? 1 : 0.6 }}>
                   {option.text}
                 </span>
-                <span className="text-gray-500 dark:text-gray-400">
+                <span className="text-gray-500 dark:text-gray-400 transition-all duration-500 ease-out"
+                      style={{ 
+                        opacity: isAnimated ? 1 : 0.6,
+                        transform: isAnimated ? 'translateX(0)' : 'translateX(10px)'
+                      }}>
                   {option.votes} votes ({percentage.toFixed(1)}%)
                 </span>
               </div>
               
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
                 <div
                   className={cn(
-                    "h-2 rounded-full transition-all duration-1000 ease-out",
+                    "h-3 rounded-full transition-all duration-700 ease-out shadow-sm",
                     getBarColor(index)
                   )}
                   style={{
-                    width: animated ? `${percentage}%` : '0%'
+                    width: isAnimated ? `${percentage}%` : '0%',
+                    transform: isAnimated ? 'scaleX(1)' : 'scaleX(0)',
+                    transformOrigin: 'left'
                   }}
                 />
               </div>
@@ -86,7 +103,8 @@ export default function PollDisplay({
         })}
       </div>
       
-      <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+      <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 transition-opacity duration-500"
+           style={{ opacity: animatedOptions.length === options.length ? 1 : 0.6 }}>
         Total votes: {totalVotes}
       </div>
     </div>

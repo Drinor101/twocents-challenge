@@ -12,5 +12,5 @@ export const DEV_CONFIG = {
   ENABLE_MOCK_FALLBACK: true,
   
 
-  MOCK_DELAY: 500
+  MOCK_DELAY: 100 // Reduced from 500ms to 100ms for faster loading
 }; 

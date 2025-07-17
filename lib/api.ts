@@ -223,6 +223,10 @@ export async function call<T>(method: string, parameters: Record<string, any> = 
     
     console.debug("API Request:", { method, parameters });
 
+    // Create AbortController for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+
     const response = await fetch(API_CONFIG.baseUrl, {
       method: "POST",
       headers: {
@@ -231,7 +235,10 @@ export async function call<T>(method: string, parameters: Record<string, any> = 
         "Origin": typeof window !== 'undefined' ? window.location.origin : "http://localhost:3000"
       },
       body: JSON.stringify(body),
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
 
     const rawText = await response.text();
     const truncatedText = rawText.length > 500 ? rawText.slice(0, 500) + "..." : rawText;

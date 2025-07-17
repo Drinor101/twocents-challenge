@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { getPost, getComments, getPoll, getUser, Post, Comment, User } from '@/lib/api';
 import NetWorthPill from '@/components/NetWorthPill';
@@ -29,13 +29,7 @@ export default function PostDetail() {
   const [userModalOpen, setUserModalOpen] = useState(false);
   const [userLoading, setUserLoading] = useState(false);
 
-  useEffect(() => {
-    if (postUuid) {
-      fetchPostData();
-    }
-  }, [postUuid]);
-
-  const fetchPostData = async () => {
+  const fetchPostData = useCallback(async () => {
     try {
       setError(null);
       setLoading(true);
@@ -65,7 +59,13 @@ export default function PostDetail() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [postUuid]);
+
+  useEffect(() => {
+    if (postUuid) {
+      fetchPostData();
+    }
+  }, [postUuid, fetchPostData]);
 
   const handleUserClick = async (userUuid: string) => {
     setUserModalOpen(true);

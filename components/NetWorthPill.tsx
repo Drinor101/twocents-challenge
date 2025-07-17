@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 interface NetWorthPillProps {
   netWorth: number;
   username: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
   className?: string;
 }
 

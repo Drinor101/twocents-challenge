@@ -218,6 +218,27 @@ The app is production-ready and will work with real data when the TwoCents API i
 - ✅ **Graceful degradation for API failures**
 - ✅ **Professional debugging capabilities**
 
+## Demo & Screenshots
+
+### Live Demo
+🌐 **Live Application**: [https://twocents-challenge.netlify.app/](https://twocents-challenge.netlify.app/)
+
+### Screenshots
+📸 **Application Screenshots** (included in `/screenshots/` folder):
+- Home feed with posts and filters
+- Individual post detail view
+- Poll animations and results
+- User profile modal
+- Mobile responsive design
+- Dark/light theme switching
+
+### Demo Video
+🎥 **Demo Video**: `screenshots/TwoCents - Social Platform -.mp4`
+- Shows scrolling through the feed
+- Demonstrates post interactions
+- Features poll animations
+- Shows user profile functionality
+
 ## License
 
 This project was created for the TwoCents technical challenge. 

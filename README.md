@@ -1,6 +1,6 @@
 # TwoCents Social Network
 
-A modern social network where usernames represent net worth, built with Next.js, TypeScript, and Tailwind CSS.
+A modern social network where usernames represent net worth, built with React,Next.js, TypeScript, and Tailwind CSS.
 
 ## Features
 
